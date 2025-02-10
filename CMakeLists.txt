@@ -28,37 +28,37 @@ set(PICO_BOARD pico_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(Tarefa62 C CXX ASM)
+project(tarefa_6_2 C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Tarefa62 Tarefa62.c )
+add_executable(tarefa_6_2 main.c inc/ssd1306_i2c.c)
 
-pico_set_program_name(Tarefa62 "Tarefa62")
-pico_set_program_version(Tarefa62 "0.1")
+pico_set_program_name(tarefa_6_2 "tarefa_6_2")
+pico_set_program_version(tarefa_6_2 "0.1")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(Tarefa62 0)
-pico_enable_stdio_usb(Tarefa62 0)
+pico_enable_stdio_uart(tarefa_6_2 0)
+pico_enable_stdio_usb(tarefa_6_2 1)
 
 # Add the standard library to the build
-target_link_libraries(Tarefa62
+target_link_libraries(tarefa_6_2
         pico_stdlib)
 
 # Add the standard include files to the build
-target_include_directories(Tarefa62 PRIVATE
+target_include_directories(tarefa_6_2 PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
-target_link_libraries(Tarefa62 
-        hardware_i2c
+target_link_libraries(tarefa_6_2 
         hardware_adc
+        hardware_i2c
         hardware_pwm
         )
 
-pico_add_extra_outputs(Tarefa62)
+pico_add_extra_outputs(tarefa_6_2)
 
