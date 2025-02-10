@@ -141,7 +141,7 @@ void joystick_read_axis(uint16_t *vrx_value, uint16_t *vry_value)
 }
 
 // ##NÃO ESQUEÇA DE TIRAR## OledRenderString(ssd, 0, 0, "SINAL ABERTO - ATRAVESSAR COM CUIDADO");
-int menu_op1() {
+void menu_op1() {
   while (!gpio_get(SW)) // Enquanto o Joystick estiver solto
   {
     joystick_read_axis(&vrx_value, &vry_value); // Lê os valores dos eixos do joystick
@@ -152,7 +152,7 @@ int menu_op1() {
     // Pequeno delay antes da próxima leitura
     sleep_ms(100); // Espera 100 ms antes de repetir o ciclo
   }
-  return 0;
+  return;
 }
 
 int main(){
@@ -160,8 +160,25 @@ int main(){
     setup();                                 // Chama a função de configuração
     printf("Joystick-PWM\n");                // Exibe uma mensagem inicial via porta serial
 
+    unsigned int menu_number = 1;
     // Loop principal
     while(1){
-        
+        // Leitura do valor do eixo Y do joystick
+        adc_select_input(ADC_CHANNEL_1); // Seleciona o canal ADC para o eixo Y
+        sleep_us(2);                     // Pequeno delay para estabilidade
+
+        if(adc_read() > 2000){           // Lê o valor do eixo Y (0-4095)
+            if(menu_number == 3){
+                menu_number = 1;
+            } else{
+                menu_number += 1;
+            }
+
+        } else{
+            if(menu_number == 1) menu_number = 3;
+            else menu_number -= 1;
+        }
+
+          sleep_ms(200) // para evitar debounce
     }
 }
